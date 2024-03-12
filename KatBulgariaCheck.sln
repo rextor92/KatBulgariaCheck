@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{1C2D1976-5F9C-4770-AED4-D467DE66E2FC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{29C0F755-5932-4CEC-98CC-8747E024C18C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8572DA90-CEA1-4E43-9F9B-C830BB65C29A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{33849022-1520-4741-93CE-E6DDD8CD962C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5331086E-B522-4AB4-B74F-E1E5414074DA}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KatBulgariaCheck.API", "src\KatBulgariaCheck.API\KatBulgariaCheck.API.csproj", "{B2A3F697-DDF4-4E0E-A616-9E8554C620FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KatBulgariaCheck.Function", "src\KatBulgariaCheck.Function\KatBulgariaCheck.Function.csproj", "{06CE176B-311D-4D2C-8E4F-06B38742CA38}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2A3F697-DDF4-4E0E-A616-9E8554C620FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2A3F697-DDF4-4E0E-A616-9E8554C620FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2A3F697-DDF4-4E0E-A616-9E8554C620FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2A3F697-DDF4-4E0E-A616-9E8554C620FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06CE176B-311D-4D2C-8E4F-06B38742CA38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06CE176B-311D-4D2C-8E4F-06B38742CA38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06CE176B-311D-4D2C-8E4F-06B38742CA38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06CE176B-311D-4D2C-8E4F-06B38742CA38}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B2A3F697-DDF4-4E0E-A616-9E8554C620FB} = {8572DA90-CEA1-4E43-9F9B-C830BB65C29A}
+		{06CE176B-311D-4D2C-8E4F-06B38742CA38} = {8572DA90-CEA1-4E43-9F9B-C830BB65C29A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DC03097B-788C-4377-95AF-39B2DD8A3C9E}
+	EndGlobalSection
+EndGlobal
