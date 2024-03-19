@@ -1,5 +1,9 @@
 name: Update NuGet Packages
 
+permissions:
+  contents: write
+  pull-requests: write
+
 on:
   schedule:
     # Runs at 02:00 UTC every day
