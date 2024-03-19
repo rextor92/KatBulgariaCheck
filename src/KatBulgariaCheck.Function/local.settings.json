@@ -3,7 +3,7 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    "IndividualObligationsSearchSettings:DrivingLicenceNumber": "",
+    "IndividualObligationsSearchSettings:DrivingLicenseNumber": "",
     "IndividualObligationsSearchSettings:PersonalIdCardNumber": "",
     "IndividualObligationsSearchSettings:PersonalIdentityNumber": "",
     "IndividualObligationsSearchSettings:VehicleRegistrationNumber": ""
