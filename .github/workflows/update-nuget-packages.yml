@@ -1,0 +1,47 @@
+name: Update NuGet Packages
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  schedule:
+    - cron:  '0 2 * * 6'
+  workflow_dispatch:
+
+jobs:
+  update-packages:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0'
+
+    - name: Install dotnet-outdated
+      run: dotnet tool install --global dotnet-outdated-tool
+
+    - name: Check for outdated packages
+      run: dotnet outdated --upgrade --version-lock Major
+
+    - name: Commit updates
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add .
+        git commit -m "Update NuGet packages" -a || echo "No changes to commit"
+      
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v6
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        title: 'Automated NuGet Package Updates'
+        commit-message: 'Update NuGet packages'
+        branch: 'feature/nuget-package-updates'
+        delete-branch: true
+        body: 'This is an auto-generated PR with NuGet package updates.'
