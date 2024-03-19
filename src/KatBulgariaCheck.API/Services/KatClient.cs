@@ -30,14 +30,32 @@ namespace KatBulgariaCheck.API.Services
 
         public async Task<Result<KatResponse>> GetPersonalObligations(ObligatedIndividualSearchType obligatedIndividualSearchType)
         {
-            try
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("https://e-uslugi.mvr.bg/api/Obligations/AND");
+
+            var test = new KatRequest()
             {
-                return Result.Fail<KatResponse>("Not implemented");
+                SearchMode = 1,
+                ObligatedEntityType = ObligatedEntityType.Individual,
+                AdditionalDataProvided = ObligatedIndividualSearchType.VehicleNumber,
+                VehicleRegistrationNumber = "CA2813XP",
+                ObligedPersonIdentityNumber = "9202176667"
+            };
+
+            var requestUri = client.BaseAddress + $"?obligatedPersonType={(int)test.ObligatedEntityType}&additinalDataForObligatedPersonType=" +
+                $"{(int)test.AdditionalDataProvided}&mode={test.SearchMode}&obligedPersonIdent={test.ObligedPersonIdentityNumber}&foreignVehicleNumber={test.VehicleRegistrationNumber}";
+
+            var response = await client.GetAsync(requestUri);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = response.Content.ReadAsStringAsync().Result;
+                _logger.LogInformation($"Response content: {content}");
+                return Result.Ok<KatResponse>(new KatResponse());
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex, "Error occurred while getting company obligations");
-                return Result.Fail<KatResponse>("Error occurred while getting company obligations");
+                _logger.LogError($"Failed to send GET request. Status code: {response.StatusCode}");
+                return Result.Ok<KatResponse>(new KatResponse());
             }
         }
     }

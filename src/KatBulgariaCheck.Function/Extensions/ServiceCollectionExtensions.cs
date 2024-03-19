@@ -11,8 +11,8 @@ namespace KatBulgariaCheck.Function.Extensions
         {
             services.AddOptions<TOptions>()
                 .BindConfiguration(configurationSection)
-            .ValidateFluentValidation()
-            .ValidateOnStart();
+                .ValidateFluentValidation()
+                .ValidateOnStart();
 
             return services;
         }
