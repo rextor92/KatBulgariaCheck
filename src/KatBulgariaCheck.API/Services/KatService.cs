@@ -22,7 +22,10 @@ namespace KatBulgariaCheck.API.Services
             _logger = loggerFactory.CreateLogger<KatService>();
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+
         public async Task<Result<KatResponse>> GetCompanyObligationsAsync()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             return Result.Fail<KatResponse>("Not implemented");
         }
@@ -30,6 +33,9 @@ namespace KatBulgariaCheck.API.Services
         public async Task<Result<KatResponse>> GetPersonalObligationsAsync()
         {
             _logger.LogInformation($"{nameof(GetPersonalObligationsAsync)}: Getting personal obligations");
+
+            ArgumentNullException.ThrowIfNull(_individualObligationsSearchSettings.PersonalIdentityNumber);
+
             if (!string.IsNullOrEmpty(_individualObligationsSearchSettings.PersonalIdCardNumber))
             {
                 return await _katClient.PersonalCheckByEgnAndIdCardAsync(

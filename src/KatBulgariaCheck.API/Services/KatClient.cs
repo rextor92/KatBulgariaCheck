@@ -19,7 +19,9 @@ namespace KatBulgariaCheck.API.Services
             _logger = loggerFactory.CreateLogger<KatClient>();
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<Result<KatResponse>> GetCompanyObligationsAsync()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             return Result.Fail<KatResponse>("Not implemented");
         }
