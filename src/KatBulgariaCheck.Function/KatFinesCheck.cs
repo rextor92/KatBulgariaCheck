@@ -1,3 +1,4 @@
+using System.Net;
 using KatBulgariaCheck.API.Interfaces;
 using KatBulgariaCheck.Models.Kat.Enums;
 using Microsoft.Azure.Functions.Worker;
@@ -9,20 +10,22 @@ namespace KatBulgariaCheck.Function
     public class KatFinesCheck
     {
         private readonly ILogger _logger;
-        private readonly IKatClient _katClient;
+        private readonly IKatService _katService;
 
-        public KatFinesCheck(IKatClient katClient,
+        public KatFinesCheck(IKatService katService,
             ILoggerFactory loggerFactory)
         {
-            _katClient = katClient;
+            _katService = katService;
             _logger = loggerFactory.CreateLogger<KatFinesCheck>();
         }
 
         [Function(nameof(TestAsync))]
-        public async Task<HttpResponseData> TestAsync([HttpTrigger] HttpRequestData request)
+        public async Task<HttpResponseData> TestAsync(
+            [HttpTrigger(AuthorizationLevel.Anonymous, WebRequestMethods.Http.Get)]
+            HttpRequestData request)
         {
-            _logger.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-
+            _logger.LogInformation($"Testing function at: {DateTime.Now}");
+            await _katService.GetPersonalObligationsAsync();
             var response = request.CreateResponse(System.Net.HttpStatusCode.OK);
             return response;
         }
@@ -37,7 +40,7 @@ namespace KatBulgariaCheck.Function
                 _logger.LogInformation($"Next timer schedule at: {myTimer.ScheduleStatus.Next}");
             }
 
-            await _katClient.GetPersonalObligations(ObligatedIndividualSearchType.VehicleNumber);
+            await _katService.GetPersonalObligationsAsync();
         }
     }
 }
