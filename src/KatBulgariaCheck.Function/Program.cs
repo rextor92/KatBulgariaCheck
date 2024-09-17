@@ -18,6 +18,7 @@ var host = new HostBuilder()
         services.AddValidatorsFromAssembly(typeof(IndividualObligationsSearchSettings).Assembly);
 
         services.AddOptionsWithFluentValidation<IndividualObligationsSearchSettings>(IndividualObligationsSearchSettings.ConfigurationSection);
+        services.AddScoped<IKatService, KatService>();
         services.AddScoped<IKatClient, KatClient>();
     })
     .Build();

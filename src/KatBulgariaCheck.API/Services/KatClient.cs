@@ -1,10 +1,8 @@
 ﻿using FluentResults;
-using KatBulgariaCheck.API.Helpers.Settings;
 using KatBulgariaCheck.API.Interfaces;
 using KatBulgariaCheck.Models.Kat;
 using KatBulgariaCheck.Models.Kat.Enums;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace KatBulgariaCheck.API.Services
 {
@@ -12,40 +10,81 @@ namespace KatBulgariaCheck.API.Services
     {
         private readonly ILogger _logger;
         private readonly HttpClient _httpClient;
-        private readonly IndividualObligationsSearchSettings _individualObligationsSearchSettings;
 
         public KatClient(HttpClient httpClient,
-            IOptions<IndividualObligationsSearchSettings> individualObligationsSearchSettings,
             ILoggerFactory loggerFactory)
         {
             _httpClient = httpClient;
-            _individualObligationsSearchSettings = individualObligationsSearchSettings.Value;
+            _httpClient.BaseAddress = new Uri("https://e-uslugi.mvr.bg/api/Obligations/AND");
             _logger = loggerFactory.CreateLogger<KatClient>();
         }
 
-        public async Task<Result<KatResponse>> GetCompanyObligations()
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        public async Task<Result<KatResponse>> GetCompanyObligationsAsync()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             return Result.Fail<KatResponse>("Not implemented");
         }
 
-        public async Task<Result<KatResponse>> GetPersonalObligations(ObligatedIndividualSearchType obligatedIndividualSearchType)
+        public async Task<Result<KatResponse>> PersonalCheckByEgnAndDriversLicenseAsync(string egn, string driversLicense)
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("https://e-uslugi.mvr.bg/api/Obligations/AND");
+            _logger.LogInformation($"{nameof(PersonalCheckByEgnAndDriversLicenseAsync)} is invoked.");
 
-            var test = new KatRequest()
+            var requestUri = _httpClient.BaseAddress +
+                $"?obligatedPersonType={(int)ObligatedEntityType.Individual}" +
+                $"&additinalDataForObligatedPersonType={(int)ObligatedIndividualSearchType.VehicleNumber}" +
+                $"&mode=1" +
+                $"&obligedPersonIdent={egn}&drivingLicenceNumber={driversLicense}";
+
+            var response = await _httpClient.GetAsync(requestUri);
+            if (response.IsSuccessStatusCode)
             {
-                SearchMode = 1,
-                ObligatedEntityType = ObligatedEntityType.Individual,
-                AdditionalDataProvided = ObligatedIndividualSearchType.VehicleNumber,
-                VehicleRegistrationNumber = "CA2813XP",
-                ObligedPersonIdentityNumber = "9202176667"
-            };
+                var content = response.Content.ReadAsStringAsync().Result;
+                _logger.LogInformation($"Response content: {content}");
+                return Result.Ok<KatResponse>(new KatResponse());
+            }
+            else
+            {
+                _logger.LogError($"Failed to send GET request. Status code: {response.StatusCode}");
+                return Result.Ok<KatResponse>(new KatResponse());
+            }
+        }
 
-            var requestUri = client.BaseAddress + $"?obligatedPersonType={(int)test.ObligatedEntityType}&additinalDataForObligatedPersonType=" +
-                $"{(int)test.AdditionalDataProvided}&mode={test.SearchMode}&obligedPersonIdent={test.ObligedPersonIdentityNumber}&foreignVehicleNumber={test.VehicleRegistrationNumber}";
+        public async Task<Result<KatResponse>> PersonalCheckByEgnAndIdCardAsync(string egn, string idCard)
+        {
+            _logger.LogInformation($"{nameof(PersonalCheckByEgnAndIdCardAsync)} is invoked.");
 
-            var response = await client.GetAsync(requestUri);
+            var requestUri = _httpClient.BaseAddress +
+                $"?obligatedPersonType={(int)ObligatedEntityType.Individual}" +
+                $"&additinalDataForObligatedPersonType={(int)ObligatedIndividualSearchType.VehicleNumber}" +
+                $"&mode=1" +
+                $"&obligedPersonIdent={egn}&personalDocumentNumber={idCard}";
+
+            var response = await _httpClient.GetAsync(requestUri);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = response.Content.ReadAsStringAsync().Result;
+                _logger.LogInformation($"Response content: {content}");
+                return Result.Ok<KatResponse>(new KatResponse());
+            }
+            else
+            {
+                _logger.LogError($"Failed to send GET request. Status code: {response.StatusCode}");
+                return Result.Ok<KatResponse>(new KatResponse());
+            }
+        }
+
+        public async Task<Result<KatResponse>> PersonalCheckByEgnAndVehicleRegistrationAsync(string egn, string vehicleRegistration)
+        {
+            _logger.LogInformation($"{nameof(PersonalCheckByEgnAndVehicleRegistrationAsync)} is invoked.");
+
+            var requestUri = _httpClient.BaseAddress +
+                $"?obligatedPersonType={(int)ObligatedEntityType.Individual}" +
+                $"&additinalDataForObligatedPersonType={(int)ObligatedIndividualSearchType.VehicleNumber}" +
+                $"&mode=1" +
+                $"&obligedPersonIdent={egn}&foreignVehicleNumber={vehicleRegistration}";
+
+            var response = await _httpClient.GetAsync(requestUri);
             if (response.IsSuccessStatusCode)
             {
                 var content = response.Content.ReadAsStringAsync().Result;
